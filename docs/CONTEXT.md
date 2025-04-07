@@ -90,15 +90,7 @@ This project implements a neural network capable of recognizing handwritten digi
    - Optimize hyperparameters
 
 ## Dependencies
-- NumPy for matrix operations
-- Matplotlib for visualization
-- Custom neural network implementation
-- Web framework for interface (e.g., Flask or Streamlit)
+
 
 ## Future Enhancements
-- Support for different grid sizes
-- Multiple network architectures
-- Real-time training visualization
-- Model saving and loading
-- Transfer learning capabilities
 
