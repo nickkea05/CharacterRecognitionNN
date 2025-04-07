@@ -1,0 +1,55 @@
+# Dataset files - large files that shouldn't be in version control
+dataset/archive/*.zip
+dataset/archive/*.csv
+dataset/archive.zip
+dataset/archive/emnist_source_files/
+
+# But keep the mapping files which are small and important
+!dataset/archive/*-mapping.txt
+
+# Compiled Java class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+out/
+target/
+build/
+bin/
+
+# Virtual Machine crash logs
+hs_err_pid*
+replay_pid*
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/ 

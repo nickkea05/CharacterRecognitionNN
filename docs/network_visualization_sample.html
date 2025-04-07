@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Network Drawing Recognition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            color: white;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            z-index: 1;
+        }
+        
+        .info-container {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 2;
+            padding: 10px;
+            pointer-events: none; /* Allow clicks to pass through to canvas */
+            transition: opacity 0.3s ease;
+        }
+        
+        .instructions {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .prediction-text {
+            font-size: 48px;
+            font-weight: bold;
+            color: #f05454;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .confidence-text {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            gap: 15px;
+        }
+        
+        button {
+            background-color: rgba(240, 84, 84, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: rgba(230, 57, 70, 1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="drawingCanvas"></canvas>
+    
+    <div class="info-container" id="infoContainer">
+        <div class="instructions" id="instructions">Draw on the screen and press Enter to recognize</div>
+        <div class="prediction-text" id="prediction" style="display: none;"></div>
+        <div class="confidence-text" id="confidence" style="display: none;"></div>
+    </div>
+    
+    <div class="controls">
+        <button id="clearButton">Clear</button>
+        <button id="recognizeButton">Recognize</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('drawingCanvas');
+            const ctx = canvas.getContext('2d');
+            const instructions = document.getElementById('instructions');
+            const prediction = document.getElementById('prediction');
+            const confidence = document.getElementById('confidence');
+            const clearButton = document.getElementById('clearButton');
+            const recognizeButton = document.getElementById('recognizeButton');
+            const infoContainer = document.getElementById('infoContainer');
+            
+            // Set canvas dimensions to fill the screen
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                ctx.strokeStyle = 'white';
+                ctx.lineJoin = 'round';
+                ctx.lineCap = 'round';
+                ctx.lineWidth = 5;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Drawing variables
+            let isDrawing = false;
+            let lastX = 0;
+            let lastY = 0;
+            
+            // Drawing event listeners
+            function startDrawing(e) {
+                isDrawing = true;
+                [lastX, lastY] = [e.clientX, e.clientY];
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(e.clientX, e.clientY);
+                ctx.stroke();
+                [lastX, lastY] = [e.clientX, e.clientY];
+            }
+            
+            function stopDrawing() {
+                isDrawing = false;
+            }
+            
+            // Touch support
+            function touchStart(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                startDrawing({ clientX: touch.clientX, clientY: touch.clientY });
+            }
+            
+            function touchMove(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                draw({ clientX: touch.clientX, clientY: touch.clientY });
+            }
+            
+            // Add event listeners
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            canvas.addEventListener('touchstart', touchStart);
+            canvas.addEventListener('touchmove', touchMove);
+            canvas.addEventListener('touchend', stopDrawing);
+            
+            // Clear canvas
+            function clearCanvas() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Show instructions, hide prediction
+                instructions.style.display = 'block';
+                prediction.style.display = 'none';
+                confidence.style.display = 'none';
+            }
+            
+            // Recognize drawing
+            function recognizeDrawing() {
+                // In a real implementation, this would send the canvas data to the neural network
+                // For demo purposes, we'll just show mock results
+                
+                const mockPredictions = [
+                    { label: "Windmill", confidence: 99.7 },
+                    { label: "House", confidence: 88.2 },
+                    { label: "Tree", confidence: 92.5 },
+                    { label: "Cat", confidence: 76.3 },
+                    { label: "Sun", confidence: 84.9 },
+                    { label: "Boat", confidence: 95.8 },
+                    { label: "Car", confidence: 89.3 },
+                    { label: "Flower", confidence: 77.6 },
+                    { label: "Bird", confidence: 85.2 },
+                    { label: "Face", confidence: 68.9 },
+                    { label: "6", confidence: 87.5 },
+                    { label: "A", confidence: 89.5 },
+                    { label: "Q", confidence: 94.3 },
+                    { label: "3", confidence: 78.9 }
+                ];
+                
+                const randomPrediction = mockPredictions[Math.floor(Math.random() * mockPredictions.length)];
+                
+                // Hide instructions, show prediction
+                instructions.style.display = 'none';
+                prediction.textContent = randomPrediction.label + "!";
+                prediction.style.display = 'block';
+                confidence.textContent = "Confidence: " + randomPrediction.confidence.toFixed(1) + "%";
+                confidence.style.display = 'block';
+                
+                // Add fade-in animation
+                prediction.classList.remove('fade-in');
+                confidence.classList.remove('fade-in');
+                // Trigger reflow
+                void prediction.offsetWidth;
+                void confidence.offsetWidth;
+                prediction.classList.add('fade-in');
+                confidence.classList.add('fade-in');
+            }
+            
+            // Button event listeners
+            clearButton.addEventListener('click', clearCanvas);
+            recognizeButton.addEventListener('click', recognizeDrawing);
+            
+            // Keyboard shortcut for recognition
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    recognizeDrawing();
+                } else if (e.key === 'Escape') {
+                    clearCanvas();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
