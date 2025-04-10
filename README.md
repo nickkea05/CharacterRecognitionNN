@@ -9,7 +9,7 @@ A simple Java implementation of a neural network for EMNIST character recognitio
 - **Live Training Visualization**: Watch predictions improve as the network trains
 - **Customizable Architecture**: Easily modify network parameters and architecture
 
-![Application Demo](docs/screenshots/demo.gif)
+![Application Demo](docs/Recording2025-04-09193004-ezgif.com-crop.gif)
 
 ## About This Project
 
