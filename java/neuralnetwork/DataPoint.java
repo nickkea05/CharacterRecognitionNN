@@ -27,7 +27,7 @@ public class DataPoint {
     /**
      * Creates a new data point from an EMNIST image
      * Performs multiple transformations:
-     * 1. Flattens 2D array of pixels into 1D array
+     * 1. Flattens 2D array of pixels into 1D array (for simplicity when feeding into the network)
      * 2. Normalizes pixel values from 0-255 to 0-1 range
      * 3. Creates one-hot encoded output from the label
      */

@@ -52,4 +52,7 @@ replay_pid*
 Thumbs.db
 ehthumbs.db
 Desktop.ini
-$RECYCLE.BIN/ 
+$RECYCLE.BIN/
+
+# Don't ignore GIF files for README
+!*.gif 

@@ -79,7 +79,7 @@ public class NeuralNetwork
      * This represents how well the network performs overall
      * Used to track learning progress and evaluate model quality
      */
-    double Cost(DataPoint[] data) {
+    public double Cost(DataPoint[] data) {
         double totalCost = 0;
 
         for (DataPoint dataPoint : data) {

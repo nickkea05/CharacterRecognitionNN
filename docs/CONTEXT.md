@@ -86,11 +86,7 @@ This project implements a neural network capable of recognizing handwritten digi
 
 4. **Phase 4: Optimization**
    - Add regularization
-   - Implement dropout
-   - Optimize hyperparameters
+   - Improve neural network design (hidden layers, backpropagation logic, ReLu vs. sigmoid activation)
+   - Optimize training parameters
 
-## Dependencies
-
-
-## Future Enhancements
 

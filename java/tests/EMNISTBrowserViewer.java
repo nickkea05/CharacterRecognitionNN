@@ -1,4 +1,4 @@
-package neuralnetwork;
+package tests;
 
 import javax.swing.*;
 import java.awt.*;
